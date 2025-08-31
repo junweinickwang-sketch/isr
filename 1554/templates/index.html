@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block content %}
+<div class="card">
+  <h1 class="title">Research Search</h1>
+<form method="GET" action="/results">
+    <div class="row">
+      <div class="grow"><input class="input" type="text" name="q" placeholder="Type your research question..." required></div>
+      <div><button class="btn" type="submit">Generate AI Overview</button></div>
+    </div>
+  </form>
+  <div class="banner" style="margin-top:12px"><p>Please do not use any other generative AI tools or search engines, except for our AI Overview tool and the websites we cite in this response. We will utilize NLP tools to track whether you use various information sources. If you use any other source, we will <b>not</b> give you the compensation.</p></div>
+</div>
+{% endblock %}
