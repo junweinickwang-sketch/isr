@@ -1,0 +1,199 @@
+{% extends "base.html" %}{% block content %}
+
+
+    
+    <!-- INSTRUCTION_CARD -->
+    <div class="card compact"><h2 class="title">Instruction</h2>
+      <div class="instruction prose">
+  <p>You are serving as an education policy consultant for a mid-sized public school district. The school board has asked you to research and prepare a comprehensive policy recommendation on whether to implement a district-wide smartphone ban during school hours.</p>
+
+  <p><b>Your Assignment:</b> Using the search tool provided, gather relevant information and prepare a policy brief that addresses the following components (Aim for approximately 100-300 words in your final policy brief):</p>
+
+  <p><b>Policy Recommendation &amp; Rationale</b> — Clearly state whether you recommend implementing the smartphone ban or not; provide 3–4 core reasons supporting your position; explain how your recommendation serves the district's educational mission.</p>
+
+  <p><b>Implementation Plan &amp; Considerations</b> — If recommending a ban: specify enforcement mechanisms, exceptions, and logistics. If opposing a ban: propose alternative approaches to address smartphone-related issues.</p>
+
+  <p>Please do not use any other generative AI tools or search engines, except for our AI Overview tool and the websites we cite in this response. We will utilize NLP tools to track whether you use various information sources. If you use any other source, we will <b>not</b> give you the compensation.</p>
+</div>
+    </div>
+
+<!-- SEARCH_HEADER (search-only) -->
+    <div class="card">
+      <form id="searchForm">
+        <div class="row">
+          <div class="grow"><input class="input" id="searchInput" type="text" name="q" value="{{ query }}" placeholder="Type your research question..." required></div>
+          <div><button class="btn" type="submit">Re‑generate AI Overview</button></div>
+        </div>
+      </form>
+    </div>
+<div class="card">
+  <h2 class="title">AI Overview</h2>
+  {% include "_overview_fragment.html" %}
+  <h3 style="margin:20px 0 10px;font-size:20px">Cited sources</h3>
+  <p class="subtitle" style="margin-top:-2px">You can click into the sources below to view full details from the prepared materials.</p>
+  {% include "_citations_fragment.html" %}
+  <div style="margin-top:24px"></div>
+  <h3 style="margin:10px 0 10px;font-size:20px">Submit your conclusion</h3>
+  <p class="subtitle">Please summarize your findings in at least <b>100 words</b>. We will award an additional <b>$5</b> bonus to the <b>top 20%</b> of the best answers.</p>
+  {% if submit_error %}<p style="color:#ff6b6b;margin-top:6px">{{ submit_error }}</p>{% endif %}
+  <form method="POST" action="/submit">
+    <input type="hidden" name="q" value="{{ query }}"/>
+    <input type="hidden" name="embed" value="1"/>
+    <label for="conclusion" class="subtitle">Your conclusion</label>
+    <textarea id="conclusion" name="conclusion" minlength="100" required placeholder="Type your conclusion here (pasting is disabled)..."></textarea>
+    <div class="row" style="margin-top:10px;align-items:center">
+      <div class="subtitle" id="wordCount">0 words</div><div style="flex:1"></div>
+      <button class="btn" id="submitBtn" type="submit" disabled>Submit</button>
+      <a class="btn secondary" href="/" style="margin-left:8px">New search</a>
+    </div>
+  </form>
+  
+
+<script>
+(function(){
+  if (window.__initResultsPageV2) return; window.__initResultsPageV2 = true;
+
+  const form = document.getElementById('searchForm');
+  const input = document.getElementById('searchInput');
+  const prolificId = "{{ prolific_id or '' }}";
+  const conclusionTA = document.getElementById('conclusion');
+  const wordCountEl = document.getElementById('wordCount');
+  const submitBtn = document.getElementById('submitBtn');
+  const key = 'conclusion_' + (prolificId || 'anon');
+
+  // word count helper
+  function countWords(t){ const m = (t.trim().match(/\b\w+\b/g) || []); return m.length; }
+  function updateWC(){
+    if (!conclusionTA || !wordCountEl || !submitBtn) return;
+    const n = countWords(conclusionTA.value);
+    wordCountEl.textContent = n + " words";
+    submitBtn.disabled = n < 100;
+  }
+
+  // restore draft as early as possible
+  try {
+    if (conclusionTA){
+      const saved = localStorage.getItem(key);
+      if (saved && !conclusionTA.value) {
+        conclusionTA.value = saved;
+      }
+    }
+  } catch(e){}
+
+  // save on each input + keep wordcount in sync
+  if (conclusionTA){
+    conclusionTA.addEventListener('input', function(){
+      try { localStorage.setItem(key, conclusionTA.value); } catch(e){}
+      updateWC();
+    });
+    // keep original paste/drop prevention (optional; comment out to allow)
+    conclusionTA.addEventListener('paste', e=>e.preventDefault());
+    conclusionTA.addEventListener('drop', e=>e.preventDefault());
+    conclusionTA.addEventListener('keydown', e=>{ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='v'){ e.preventDefault(); } });
+  }
+
+  // initial word count render
+  updateWC();
+
+  // AJAX re-search: replace only overview & citations
+  async function ajaxRefresh(q){
+    try {
+      const res = await fetch('/api/overview', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({q})
+      });
+      const data = await res.json();
+      if (data.overview_html){
+        const temp = document.createElement('div');
+        temp.innerHTML = data.overview_html;
+        const newOverview = temp.querySelector('#overview') || temp;
+        const target = document.getElementById('overview');
+        if (target) target.replaceWith(newOverview);
+      }
+      if (data.citations_html){
+        const temp2 = document.createElement('div');
+        temp2.innerHTML = data.citations_html;
+        const newCits = temp2.querySelector('#citations') || temp2;
+        const target2 = document.getElementById('citations');
+        if (target2) target2.replaceWith(newCits);
+      }
+    } catch(err){
+      console.error(err);
+      alert('Failed to refresh AI Overview. Please try again.');
+    }
+  }
+
+  if (form){
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      const q = (input && input.value ? input.value.trim(): "");
+      if (!q) return;
+      ajaxRefresh(q);
+    });
+  }
+})();
+</script>
+
+</div>
+{% endblock %}
+
+<script>
+(function(){
+  if (window.__initResultsPage) return; window.__initResultsPage = true;
+  const form = document.getElementById('searchForm');
+  const input = document.getElementById('searchInput');
+  const overviewBox = document.getElementById('overview') || document.querySelector('#overview');
+  const citationsBox = document.getElementById('citations') || document.querySelector('#citations');
+  const prolificId = "{{ prolific_id or '' }}";
+  const conclusionTA = document.getElementById('conclusion');
+  const key = 'conclusion_' + (prolificId || 'anon');
+
+  // restore draft
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved && conclusionTA && !conclusionTA.value) conclusionTA.value = saved;
+  } catch(e){}
+
+  // save on input
+  if (conclusionTA){
+    conclusionTA.addEventListener('input', function(){
+      try { localStorage.setItem(key, conclusionTA.value); } catch(e){}
+    });
+  }
+
+  // AJAX re-search
+  if (form){
+    form.addEventListener('submit', async function(ev){
+      ev.preventDefault();
+      const q = input.value.trim();
+      if (!q) return;
+      try {
+        const res = await fetch('/api/overview', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({q})
+        });
+        const data = await res.json();
+        if (data.overview_html){
+          const temp = document.createElement('div');
+          temp.innerHTML = data.overview_html;
+          const newOverview = temp.querySelector('#overview') || temp;
+          const target = document.getElementById('overview');
+          if (target) target.replaceWith(newOverview);
+        }
+        if (data.citations_html){
+          const temp2 = document.createElement('div');
+          temp2.innerHTML = data.citations_html;
+          const newCits = temp2.querySelector('#citations') || temp2;
+          const target2 = document.getElementById('citations');
+          if (target2) target2.replaceWith(newCits);
+        }
+      } catch(err){
+        console.error(err);
+        alert('Failed to refresh AI Overview. Please try again.');
+      }
+    });
+  }
+})();
+</script>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ title or "Research Search" }}</title>
+<style>
+:root{--bg:#0a0e1b;--surface:#0f1526;--card:#111a33;--text:#eaf2ff;--muted:#9fb1c9;--primary:#3b82f6;--primary2:#2563eb;--border:rgba(255,255,255,0.08);}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 10% -10%, rgba(59,130,246,.15), transparent),var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+.container{max-width:1080px;margin:48px auto;padding:0 20px}
+.card{width:100%;background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)),var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:0 20px 40px rgba(0,0,0,.40)}
+h1.title{font-size:34px;margin:0 0 10px;font-weight:800}
+h2.title{font-size:26px;margin:6px 0 14px;font-weight:750}
+.prose{font-size:17px;line-height:1.65}
+.prose p{margin:8px 0}
+.prose ol,.prose ul{margin:8px 0;padding-left:1.25rem}
+.prose li{margin:6px 0}
+
+.subtitle{color:var(--muted);margin:6px 0 18px;font-size:16px}
+
+.card.compact{padding:18px}
+.instruction.prose{font-size:16px;line-height:1.5}
+.instruction.prose p{margin:6px 0}
+.instruction.prose li{margin:4px 0}
+/* make instruction shorter on desktop by using two columns */
+@media (min-width: 960px){
+  .instruction .list{column-count:2;column-gap:32px}
+}
+@media (max-width: 959px){
+  .instruction .list{column-count:1}
+}
+
+.banner{border:1px solid var(--border);background:linear-gradient(180deg, rgba(59,130,246,.12), rgba(59,130,246,.05));padding:14px 16px;border-radius:14px;margin:12px 0 22px;font-size:15px}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.grow{flex:1 1 520px}
+.input{width:100%;border-radius:14px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:16px 18px;font-size:17px;outline:none}
+.btn{display:inline-block;background:linear-gradient(180deg,var(--primary),var(--primary2));color:#fff;padding:12px 18px;border-radius:12px;border:none;cursor:pointer;font-weight:700;font-size:15px}
+.btn.secondary{background:#1b2440}
+.list{list-style:none;padding:0;margin:0}
+.list li{padding:12px 0;border-top:1px dashed var(--border);font-size:16px}
+a{color:#99c2ff;text-decoration:none}a:hover{text-decoration:underline}
+textarea{width:100%;min-height:240px;border-radius:14px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:16px 18px;font-size:16px;outline:none}
+.footer{color:var(--muted);font-size:12px;margin-top:30px;text-align:center}
+.nav{margin-bottom:14px}
+.nav a{margin-right:10px;font-size:14px;color:#cfe1ff}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="nav">
+    <a href="/">Home</a>
+    <!-- Admin links intentionally hidden from UI -->
+  </div>
+  {% block content %}{% endblock %}
+  <div class="footer">© Research Experiment Interface</div>
+</div>
+</body>
+</html>

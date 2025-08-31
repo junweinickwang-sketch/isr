@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block content %}
+<div class="card">
+  <h2 class="title">Admin Access</h2>
+  <p class="subtitle">Enter the password to view this page.</p>
+  <form method="POST" action="/admin/login">
+    <input type="hidden" name="next" value="{{ next or '/' }}"/>
+    <div class="row">
+      <div class="grow"><input class="input" type="password" name="password" placeholder="Password" required></div>
+      <div><button class="btn" type="submit">Enter</button></div>
+    </div>
+  </form>
+  {% if error %}<p style="color:#ff6b6b;margin-top:12px">{{ error }}</p>{% endif %}
+</div>
+{% endblock %}

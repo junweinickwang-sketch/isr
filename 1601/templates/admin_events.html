@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block content %}
+<div class="card">
+  <h2 class="title">Events Log</h2>
+  <p class="subtitle">All search, click, and submit events. <a class="btn secondary" href="/admin/events/download">Download CSV</a></p>
+  {% if rows and rows|length > 1 %}
+  <div style="overflow:auto">
+    <table style="width:100%;border-collapse:collapse">
+      <thead><tr>{% for h in rows[0] %}<th style="text-align:left;border-bottom:1px solid rgba(255,255,255,.2);padding:8px 6px">{{ h }}</th>{% endfor %}</tr></thead>
+      <tbody>
+        {% for r in rows[1:] %}<tr>{% for c in r %}<td style="border-bottom:1px dashed rgba(255,255,255,.12);padding:8px 6px;white-space:pre-wrap">{{ c }}</td>{% endfor %}</tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}<p class="subtitle">No events yet.</p>{% endif %}
+</div>
+{% endblock %}
