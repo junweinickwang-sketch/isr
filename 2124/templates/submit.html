@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% block content %}
+<div class="card">
+  <h2 class="title">Submit your conclusion</h2>
+  <p class="subtitle">Please summarize your findings in at least <b>100 words</b>. We will award an additional <b>$5</b> bonus to the <b>top 20%</b> of the best answers.</p>
+  <form method="POST" action="/submit">
+    <input type="hidden" name="q" value="{{ query }}"/>
+    <label for="conclusion" class="subtitle">Your conclusion</label>
+    <textarea id="conclusion" name="conclusion" minlength="100" required placeholder="Type your conclusion here (pasting is disabled)..."></textarea>
+    <div class="row" style="margin-top:10px;align-items:center">
+      <div class="subtitle" id="wordCount">0 words</div><div style="flex:1"></div>
+      <button class="btn" id="submitBtn" type="submit" disabled>Submit</button>
+      <a class="btn secondary" href="/results?q={{ query|urlencode }}" style="margin-left:8px">Back</a>
+    </div>
+  </form>
+  {% if error %}<p style="color:#ff6b6b;margin-top:12px">{{ error }}</p>{% endif %}
+</div>
+<script>
+const ta=document.getElementById('conclusion'); const wc=document.getElementById('wordCount'); const sb=document.getElementById('submitBtn');
+function countWords(t){ return (t.trim().match(/\b\w+\b/g)||[]).length; }
+function update(){ const n=countWords(ta.value); wc.textContent=n+" words"; sb.disabled = n<100; }
+ta.addEventListener('input', update);
+ta.addEventListener('paste', e=>e.preventDefault());
+ta.addEventListener('drop', e=>e.preventDefault());
+ta.addEventListener('keydown', e=>{ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='v'){ e.preventDefault(); } });
+update();
+</script>
+{% endblock %}

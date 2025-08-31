@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block content %}
+<div class="card">
+  <h2 class="title">Thank you!</h2>
+  
+  <div class="banner" style="font-size:16px;line-height:1.6;margin-top:8px">
+    <b>Please click the following button and fill out the Qualtrics survey (which will require your Prolific ID again). We will evaluate your answer and send the reward after the survey is completed as well.</b>
+  </div>
+  <div style="margin:12px 0 16px">
+    <a class="btn" href="https://qfreeaccountssjc1.az1.qualtrics.com/jfe/form/SV_cvU0ncDrT7NTOx8">Open Qualtrics Survey</a>
+  </div>
+<div style="margin-top:10px">
+<script>
+      (function(){
+        // attempt to clear the draft for this prolific id
+        var pid = (document.cookie.match(/(?:^|; )prolific_id=([^;]+)/)||[])[1] || '';
+        if (pid){
+          try { localStorage.removeItem('conclusion_' + pid); } catch(e){}
+        }
+      })();
+    </script>
+</div>
+{% endblock %}

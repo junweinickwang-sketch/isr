@@ -1,0 +1,10 @@
+<div id="overview" class="prose">
+{% if overview %}
+<div id="overview">
+  <p style="font-size:17px;line-height:1.65">{{ overview|safe }}</p>
+</div>
+{% else %}
+<div id="overview"><p style="font-size:17px;line-height:1.65">No relevant content found in the prepared pages.</p></div>
+{% endif %}
+
+</div>
