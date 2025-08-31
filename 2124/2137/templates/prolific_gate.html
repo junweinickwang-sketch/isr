@@ -1,0 +1,23 @@
+
+{% extends "base.html" %}{% block content %}
+<div class="card">
+  <h1 class="title">Welcome</h1>
+  <div class="banner" style="margin-bottom:16px">
+    <b>Instruction:</b> You are serving as an education policy consultant for a mid-sized public school district. The school board has asked you to research and prepare a comprehensive policy recommendation on whether to implement a district-wide smartphone ban during school hours.
+    <br><br>
+    <b>Your Assignment:</b> Using the search tool provided, gather relevant information and prepare a policy brief that addresses the following components (Aim for approximately 100-300 words in your final policy brief):
+    <ol class="list" style="margin-top:8px">
+      <li><b>Policy Recommendation &amp; Rationale</b> – Clearly state whether you recommend implementing the smartphone ban or not; provide 3–4 core reasons supporting your position; explain how your recommendation serves the district's educational mission.</li>
+      <li><b>Implementation Plan &amp; Considerations</b> – If recommending a ban: specify enforcement mechanisms, exceptions, and logistics. If opposing a ban: propose alternative approaches to address smartphone-related issues.</li>
+    </ol>
+  </div>
+  <form method="POST" action="/set_prolific">
+    <label for="prolific_id" class="subtitle" style="display:block;margin-bottom:6px">Enter your Prolific ID to begin</label>
+    <div class="row">
+      <div class="grow"><input class="input" id="prolific_id" name="prolific_id" type="text" placeholder="e.g., 5f9a...abc" required></div>
+      <div><button class="btn" type="submit">Continue</button></div>
+    </div>
+    {% if error %}<p style="color:#ff6b6b;margin-top:12px">{{ error }}</p>{% endif %}
+  </form>
+</div>
+{% endblock %}
