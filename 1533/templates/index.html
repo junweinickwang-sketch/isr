@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block content %}
+<div class="card">
+  <h1 class="title">Research Search</h1>
+<form method="GET" action="/results">
+    <div class="row">
+      <div class="grow"><input class="input" type="text" name="q" placeholder="Type your research question..." required></div>
+      <div><button class="btn" type="submit">Generate AI Overview</button></div>
+    </div>
+  </form>
+</div>
+{% endblock %}

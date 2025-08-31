@@ -1,0 +1,8 @@
+
+<ol class="list" id="citations" style="counter-reset:item; padding-left:0">
+{% for c in citations %}
+  <li id="ref{{ c.idx }}">
+    <a href="{{ c.href }}?q={{ query|urlencode }}">[{{ c.idx }}] {{ c.title }}</a>
+  </li>
+{% endfor %}
+</ol>
