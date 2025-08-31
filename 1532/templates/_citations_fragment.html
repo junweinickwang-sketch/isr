@@ -1,0 +1,7 @@
+<ol class="list" id="citations" style="counter-reset:item; padding-left:0">
+{% for c in citations %}
+  <li id="ref{{ c.idx }}">
+    <a target="_blank" rel="noopener" href="{{ c.href }}">[{{ c.idx }}] {{ c.title }}</a>
+  </li>
+{% endfor %}
+</ol>
